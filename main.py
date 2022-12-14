@@ -15,20 +15,24 @@ storm_activate = []
 
 
 class Start(cmd.Cmd):
+    """
+    PRE : The command must be known to be executed 
+    POST : Start the requested method
+    """
     intro = "\nBienvenue dans le jeu Space Battle.\n[help] or [?] : pour la liste des commandes possibles." \
             "\n[start] pour lancer une nouvelle partie.\n[quit] pour quitter le programme."
     prompt = 'Space Battle : '
     file = None
 
     def do_start(self, arg=0):
-        """Méthode qui lance le jeu"""
+        """Start the game"""
 
         functions.board()
         functions.initialize_teams()
         functions.start_battle()
 
     def do_quit(self, arg=0):
-        """Méthode qui permet de quitter le jeu"""
+        """Quit the game"""
         sys.exit()
 
 

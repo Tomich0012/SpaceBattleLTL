@@ -6,8 +6,10 @@ import os
 
 
 def tempete():
-    """Fonction qui initialise un évènement aléatoire sur le board"""
-
+    """This function start a random storm on the board in the game. 
+    PRE : /
+    POST : A random row automatically switches to "touch". 
+    """
     if main.datetime.now().strftime("%H:%M") == main.time_event and main.storm_activate == []:
         main.storm_activate.append("storm happened")
         print("Attention, la tempête frappe\n")
@@ -23,7 +25,12 @@ def tempete():
 
 
 def save(start_time, winner, win_condition):
-    """Fonction qui permet de sauvegarder les statistiques d'une partie terminée à chaque fin de jeu"""
+    """This function save the game if if the answer is "YES"
+    PRE : /
+    POST :  If the answer is "YES" the game is save in 'statistics.txt' in the directory 'RECORDS' and a message is print.
+            If the answer is "NO" a message is print.
+    RAISES : ValueError if the answer is not "YES" or "NOT".
+    """
 
     try:
         response = input("Voulez vous sauvegarder les données de cette partie ? [YES/NO]\n : ").upper()
@@ -53,7 +60,10 @@ def save(start_time, winner, win_condition):
 
 
 def ask_boat_position(ship, coord_occupied):
-    """Fonction qui demande à chaque équipe les cases pour positionner chaque bateau"""
+    """This function asks each team the boxes to position each boat.
+    PRE : /
+    POST : The coordinates of each boat is send to the method 'all.checking' from the Ship class.
+    """
 
     start_coord = input(f"Entrez maintenant la PREMIERE coordonnée de votre {ship.name} qui nécessite "
                         f"{main.ships_available[ship.name]} cases : \n").upper()
@@ -63,7 +73,10 @@ def ask_boat_position(ship, coord_occupied):
 
 
 def board():
-    """Fonction qui initialise un plateau complet de 100 cases"""
+    """This function initializes a complete board of 100 cells.
+    PRE : /
+    POST : A board of 10x10 cells is created.
+    """
 
     for letter in main.alpha_columns:
         for digit in main.num_lines:
@@ -71,12 +84,18 @@ def board():
 
 
 def cls():
-    """Fonction qui permet de nettoyer la console"""
+    """This function clean the console.
+    PRE : / 
+    POST : The console is clean.
+    """
     os.system('cls')
 
 
 def initialize_teams():
-    """Fonction qui initialise les équipes et leurs bateaux respectifs"""
+    """This function initializes the teams and their respective boats
+    PRE : /
+    POST : Two teams are add to 'team' with the chosen name in the class 'main'.
+    """
 
     main.team.clear()
     equipe1 = input("Entrez le nom de l'équipe 1 ")
@@ -92,7 +111,11 @@ def initialize_teams():
 
 
 def time_ended(start_time):
-    """Fonction qui s'exécute si le timer est écoulé et annonce le gagnant en fonction des bateaux restants"""
+    """This function runs if the timer is over and announces the winner according to the remaining boats
+    PRE : /
+    POST :  If a team win the winner is annouced
+            If booth team have the same boats in the game, it's a draw.
+    """
 
     print("La partie s'est finie à cause de la limite de temps\n")
     time.sleep(1)
@@ -112,7 +135,10 @@ def time_ended(start_time):
 
 
 def start_battle():
-    """Fonction qui lance le jeu et permet de tirer sur le plateau de l'équipe adverse chacun à son tour"""
+    """This function start the game and allows you to shoot at the opposing team's board in turn
+    PRE : /
+    POST : Starts the game and runs the game.
+    """
 
     start_time = main.datetime.now().strftime("%d:%m:%Y :%H:%M")
     time_limit = (main.datetime.now() + main.timedelta(minutes=15)).strftime("%H:%M")

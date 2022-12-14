@@ -12,7 +12,12 @@ class Team:
         self.fired_shot = []
 
     def shoot(self, case_shot):
-        """Méthode qui permet de valider le tir sur le plateau de l'équipe adverse"""
+        """This Method validate the shot on the opponent's board
+        PRE : The case_shot need to be a coordinate. 
+        POST :  If the case was occupied by a boat, is touched and the case is remove from 'coord'
+                If the the case is touched and this is the last case of boat, the boat is cast.
+                If the case was empty, then the soot is cast.
+        """
 
         for j in main.team:
             if j.name != self.name:
@@ -40,7 +45,10 @@ class Board:
         self.ships = self.initialize_ships(coord_occupied)
 
     def initialize_ships(self, coord_occupied):
-        """Méthode qui initialise tous les bateaux sans leurs positions pour chaque équipe"""
+        """This method initializes all boats without their positions for each team
+        PRE : /
+        POST : All boads are in 'self.ships'
+        """
 
         ships = []
         for i in main.ships_available:
@@ -57,7 +65,11 @@ class Ship:
         functions.ask_boat_position(self, coord_occupied)
 
     def all_checking(self, start_coord, end_coord, coord_occupied):
-        """Méthode qui vérifie les coordonnées de placement du bateau"""
+        """This method verifies the placement coordinates of the boat.
+        PRE : /
+        POST : Send the coordinates to 'boat_orientation'.
+        RAISES : ValueErrorf not a coordinates.
+        """
 
         try:
             if start_coord not in main.all_coord or end_coord not in main.all_coord:
@@ -68,7 +80,10 @@ class Ship:
             functions.ask_boat_position(self, coord_occupied)
 
     def boat_orientation(self, start_coord, end_coord, ship_name, coord_occupied):
-        """Méthode qui permet de vérifier si le bateau a été placé horizontalement ou verticalement, et qui appelle create_boat()"""
+        """This method checks if the boat has been placed horizontally or vertically, and calls create_boat().
+        PRE : /
+        POST :  Create all the position to a list if the boat is in the great position. 
+        """
 
         if start_coord[0] == end_coord[0]:
             if (int(end_coord[1:]) - int(start_coord[1:])) + 1 == main.ships_available[ship_name]:
@@ -85,7 +100,10 @@ class Ship:
                 functions.ask_boat_position(self, coord_occupied)
 
     def create_boat(self, start_coord, end_coord, coord_occupied, x_or_y):
-        """Méthode qui créer le bateau horizontalement ou verticalement"""
+        """This method creates the boat horizontally or vertically.
+        PRE : /
+        POST :  Create the boat and change the availability of the boxes it occupies.
+        """
 
         if x_or_y == "x":
             coord_boat_x = []
