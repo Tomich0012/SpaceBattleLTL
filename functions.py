@@ -143,8 +143,8 @@ def start_battle():
     start_time = main.datetime.now().strftime("%d:%m:%Y :%H:%M")
     time_limit = (main.datetime.now() + main.timedelta(minutes=15)).strftime("%H:%M")
     cls()
-    print("Il est", main.datetime.now().strftime("%H:%M"), "Une tempête arrivera sur le plateau à : ", main.time_event)
-    print(f"La partie se finira automatiquement à {time_limit}")
+    input(f"Il est {main.datetime.now().strftime('%H:%M')} Une tempête arrivera sur le plateau à : {main.time_event}"
+          f"La partie se finira automatiquement à {time_limit}")
     time.sleep(5)
     try:
         while main.datetime.now().strftime("%H:%M") < time_limit:
