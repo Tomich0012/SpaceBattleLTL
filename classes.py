@@ -12,11 +12,11 @@ class Team:
         self.fired_shot = []
 
     def shoot(self, case_shot):
-        """This Method validate the shot on the opponent's board
+        """This Method validates the shot on the opponent's board
         PRE : The case_shot need to be a coordinate. 
-        POST :  If the case was occupied by a boat, is touched and the case is remove from 'coord'
-                If the the case is touched and this is the last case of boat, the boat is cast.
-                If the case was empty, then the soot is cast.
+        POST :  If the case was occupied by a boat, is touched, and the case is remove from 'coord'
+                If the case is touched and this is the last case of boat, the boat is sunk.
+                If the case was empty, then the shoot is failed.
         """
 
         for j in main.team:
@@ -47,7 +47,7 @@ class Board:
     def initialize_ships(self, coord_occupied):
         """This method initializes all boats without their positions for each team
         PRE : /
-        POST : All boads are in 'self.ships'
+        POST : All boats are in 'self.ships'
         """
 
         ships = []
@@ -68,7 +68,7 @@ class Ship:
         """This method verifies the placement coordinates of the boat.
         PRE : /
         POST : Send the coordinates to 'boat_orientation'.
-        RAISES : ValueErrorf not a coordinates.
+        RAISES : ValueError not a coordinates.
         """
 
         try:
