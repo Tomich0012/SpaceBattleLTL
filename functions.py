@@ -8,7 +8,7 @@ import os
 def tempete():
     """This function start a random storm on the board in the game. 
     PRE : /
-    POST : A random row automatically switches to "touch". 
+    POST : A random row automatically switches to “touch”.
     """
     if main.datetime.now().strftime("%H:%M") == main.time_event and main.storm_activate == []:
         main.storm_activate.append("storm happened")
@@ -25,11 +25,11 @@ def tempete():
 
 
 def save(start_time, winner, win_condition):
-    """This function save the game if if the answer is "YES"
+    """This function save the game if the answer is “YES”
     PRE : /
-    POST :  If the answer is "YES" the game is save in 'statistics.txt' in the directory 'RECORDS' and a message is print.
-            If the answer is "NO" a message is print.
-    RAISES : ValueError if the answer is not "YES" or "NOT".
+    POST :  If the answer is “YES” the game is saved in 'statistics.txt' in the directory 'RECORDS', and a message is print.
+            If the answer is “NO”, the game isn't saved, and the program shuts.
+    RAISES : ValueError if the answer is not “YES” or “NOT”.
     """
 
     try:
@@ -62,7 +62,7 @@ def save(start_time, winner, win_condition):
 def ask_boat_position(ship, coord_occupied):
     """This function asks each team the boxes to position each boat.
     PRE : /
-    POST : The coordinates of each boat is send to the method 'all.checking' from the Ship class.
+    POST : The coordinates of each boat is sent to the method 'all.checking' from the Ship class.
     """
 
     start_coord = input(f"Entrez maintenant la PREMIERE coordonnée de votre {ship.name} qui nécessite "
@@ -75,7 +75,7 @@ def ask_boat_position(ship, coord_occupied):
 def board():
     """This function initializes a complete board of 100 cells.
     PRE : /
-    POST : A board of 10x10 cells is created.
+    POST : A board of 10×10 cells is created.
     """
 
     for letter in main.alpha_columns:
@@ -92,7 +92,7 @@ def cls():
 
 
 def initialize_teams():
-    """This function initializes the teams and their respective boats
+    """This function initializes the teams, and their respective boats
     PRE : /
     POST : Two teams are add to 'team' with the chosen name in the class 'main'.
     """
@@ -113,8 +113,8 @@ def initialize_teams():
 def time_ended(start_time):
     """This function runs if the timer is over and announces the winner according to the remaining boats
     PRE : /
-    POST :  If a team win the winner is annouced
-            If booth team have the same boats in the game, it's a draw.
+    POST :  If a team win the winner is announced
+            If both team have the same boats alive at the end of the timer, it is ex-aequo.
     """
 
     print("La partie s'est finie à cause de la limite de temps\n")
