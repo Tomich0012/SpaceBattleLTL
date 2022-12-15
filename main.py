@@ -26,7 +26,7 @@ class Start(cmd.Cmd):
 
     def do_start(self, arg=0):
         """Start the game"""
-
+        functions.cls()
         functions.board()
         functions.initialize_teams()
         functions.start_battle()
