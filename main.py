@@ -16,8 +16,8 @@ storm_activate = []
 
 class Start(cmd.Cmd):
     """
-    PRE : The command must be known to be executed 
-    POST : Start the requested method
+    PRE : The command must be known to be executed.
+    POST : Start the requested method.
     """
     intro = "\nBienvenue dans le jeu Space Battle.\n[help] or [?] : pour la liste des commandes possibles." \
             "\n[start] pour lancer une nouvelle partie.\n[quit] pour quitter le programme."
@@ -25,7 +25,10 @@ class Start(cmd.Cmd):
     file = None
 
     def do_start(self, arg=0):
-        """Start the game"""
+        """Start the game.
+        PRE : /
+        POST : The game is started.
+        """
         
         functions.cls()
         functions.board()
@@ -33,7 +36,10 @@ class Start(cmd.Cmd):
         functions.start_battle()
 
     def do_quit(self, arg=0):
-        """Quit the game"""
+        """Quit the game.
+        PRE : / 
+        POST : The game is closed.
+        """
         sys.exit()
 
 
