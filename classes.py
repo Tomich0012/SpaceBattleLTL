@@ -6,21 +6,29 @@ import main
 class Team:
 
     def __init__(self, name):
-        self.name = name
-        self.coord_occupied = []
-        self.board = Board(self.name, self.coord_occupied)
-        self.fired_shot = []
+        self.__name = name
+        self.__coord_occupied = []
+        self.board = Board(self.get_name, self.get_coord_occupied)
+        self.__fired_shot = []
+
+    @property
+    def get_name(self):
+        return self.__name
+
+    @property
+    def get_coord_occupied(self):
+        return self.__coord_occupied
 
     def shoot(self, case_shot):
         """This Method validates the shot on the opponent's board
-        PRE : The case_shot need to be a coordinate. 
+        PRE : The case_shot need to be a coordinate.
         POST :  If the case was occupied by a boat, is touched, and the case is remove from 'coord'
                 If the case is touched and this is the last case of boat, the boat is sunk.
                 If the case was empty, then the shoot is failed.
         """
 
         for j in main.team:
-            if j.name != self.name:
+            if j.name != self.get_name:
                 for a in j.board.ships:
                     if case_shot in a.coord:
                         print(f"\nLa case {case_shot} du {a.name} à été touchée ! Feu à bord\n")
@@ -41,8 +49,12 @@ class Team:
 
 class Board:
     def __init__(self, team_name, coord_occupied):
-        self.team = team_name
+        self.__team = team_name
         self.ships = self.initialize_ships(coord_occupied)
+
+    @property
+    def get_team(self):
+        return self.__team
 
     def initialize_ships(self, coord_occupied):
         """This method initializes all boats without their positions for each team
@@ -52,17 +64,33 @@ class Board:
 
         ships = []
         for i in main.ships_available:
-            ships.append(Ship(i, main.ships_available[i], self.team, coord_occupied))
+            ships.append(Ship(i, main.ships_available[i], self.get_team, coord_occupied))
         return ships
 
 
 class Ship:
     def __init__(self, name, size, team_name, coord_occupied):
-        self.team = team_name
-        self.name = name
-        self.size = size
-        self.coord = []
+        self.__team = team_name
+        self.__ship_name = name
+        self.__size = size
+        self.__coord = []
         functions.ask_boat_position(self, coord_occupied)
+
+    @property
+    def get_ship_name(self):
+        return self.__ship_name
+
+    @property
+    def get_size(self):
+        return self.__size
+
+    @property
+    def coord(self):
+        return self.__coord
+
+    @coord.setter
+    def coord(self, coord_list):
+        self.__coord = coord_list
 
     def all_checking(self, start_coord, end_coord, coord_occupied):
         """This method verifies the placement coordinates of the boat.
@@ -74,7 +102,7 @@ class Ship:
         try:
             if start_coord not in main.all_coord or end_coord not in main.all_coord:
                 raise ValueError
-            self.boat_orientation(start_coord, end_coord, self.name, coord_occupied)
+            self.boat_orientation(start_coord, end_coord, self.get_ship_name, coord_occupied)
         except ValueError:
             print("Mauvaise coordonnée, recommencez")
             functions.ask_boat_position(self, coord_occupied)
@@ -82,7 +110,7 @@ class Ship:
     def boat_orientation(self, start_coord, end_coord, ship_name, coord_occupied):
         """This method checks if the boat has been placed horizontally or vertically, and calls create_boat().
         PRE : /
-        POST :  Create all the position to a list if the boat is in the great position. 
+        POST :  Create all the position to a list if the boat is in the great position.
         """
 
         if start_coord[0] == end_coord[0]:
@@ -127,3 +155,32 @@ class Ship:
             else:
                 print("Un bateau occupe déjà une ou plusieurs de ces positions, recommencez")
                 functions.ask_boat_position(self, coord_occupied)
+
+
+class Start(main.cmd.Cmd):
+    """
+    PRE : The command must be known to be executed.
+    POST : Start the requested method.
+    """
+    intro = "\nBienvenue dans le jeu Space Battle.\n[help] or [?] : pour la liste des commandes possibles." \
+            "\n[start] pour lancer une nouvelle partie.\n[quit] pour quitter le programme."
+    prompt = 'Space Battle : '
+    file = None
+
+    def do_start(self, arg=0):
+        """Start the game.
+        PRE : /
+        POST : The game is started.
+        """
+
+        functions.cls()
+        functions.board()
+        functions.initialize_teams()
+        functions.start_battle()
+
+    def do_quit(self, arg=0):
+        """Quit the game.
+        PRE : /
+        POST : The game is closed.
+        """
+        main.sys.exit()
