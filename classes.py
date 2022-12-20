@@ -9,7 +9,7 @@ class Team:
     def __init__(self, name):
         self.__name = name
         self.__coord_occupied = []
-        self.board = Board(self.get_name, self.get_coord_occupied)
+        self.board = Board(self.__name, self.__coord_occupied)
         self.__fired_shot = []
 
     @property
@@ -33,16 +33,16 @@ class Team:
         """
 
         for j in main.team:
-            if j.get_name != self.get_name:
+            if j.get_name() != self.get_name():
                 for a in j.board.ships:
                     if case_shot in a.coord:
-                        print(f"\nLa case {case_shot} du {a.get_ship_name} à été touchée ! Feu à bord\n")
+                        print(f"\nLa case {case_shot} du {a.get_ship_name()} à été touchée ! Feu à bord\n")
                         a.coord.remove(case_shot)
                         time.sleep(2)
                         if len(a.coord) == 0:
                             j.board.ships.remove(a)
                             functions.cls()
-                            print(f"Vous avez coulé le {a.get_ship_name}\n")
+                            print(f"Vous avez coulé le {a.get_ship_name()}\n")
                             if len(j.board.ships) == 0:
                                 return "stop"
                         break
@@ -53,8 +53,8 @@ class Team:
 
 
 class Board(Team):
-    def __init__(self, team_name, coord_occupied):
-        super().__init__(team_name)
+    def __init__(self, name, coord_occupied):
+        super().__init__(name)
         self.ships = self.initialize_ships(coord_occupied)
 
     def initialize_ships(self, coord_occupied):
@@ -65,7 +65,7 @@ class Board(Team):
 
         ships = []
         for i in main.ships_available:
-            ships.append(Ship(i, main.ships_available[i], self.get_name, coord_occupied))
+            ships.append(Ship(i, main.ships_available[i], self.get_name(), coord_occupied))
         return ships
 
 
@@ -103,7 +103,7 @@ class Ship:
         try:
             if start_coord not in main.all_coord or end_coord not in main.all_coord:
                 raise ValueError
-            self.boat_orientation(start_coord, end_coord, self.get_ship_name, coord_occupied)
+            self.boat_orientation(start_coord, end_coord, self.get_ship_name(), coord_occupied)
         except ValueError:
             print("Mauvaise coordonnée, recommencez")
             functions.ask_boat_position(self, coord_occupied)
