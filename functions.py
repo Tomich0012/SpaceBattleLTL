@@ -20,7 +20,7 @@ def tempete():
             for j in i.board.ships:
                 for pos in j.coord:
                     if main.mixed_coord[random_num] in pos:
-                        print(f"Le bateau {j.name} de {i.name} à été frappé par la tempête")
+                        print(f"Le bateau {j.get_ship_name} de {i.get_name} à été frappé par la tempête")
                         j.coord.remove(pos)
 
 
@@ -65,10 +65,10 @@ def ask_boat_position(ship, coord_occupied):
     POST : The coordinates of each boat is sent to the method 'all.checking' from the Ship class.
     """
 
-    start_coord = input(f"Entrez maintenant la PREMIERE coordonnée de votre {ship.name} qui nécessite "
-                        f"{main.ships_available[ship.name]} cases : \n").upper()
-    end_coord = input(f"Entrez maintenant la DERNIERE coordonnée de votre {ship.name} "
-                      f"qui nécessite {main.ships_available[ship.name]} cases : \n").upper()
+    start_coord = input(f"Entrez maintenant la PREMIERE coordonnée de votre {ship.get_ship_name} qui nécessite "
+                        f"{main.ships_available[ship.get_ship_name]} cases : \n").upper()
+    end_coord = input(f"Entrez maintenant la DERNIERE coordonnée de votre {ship.get_ship_name} "
+                      f"qui nécessite {main.ships_available[ship.get_ship_name]} cases : \n").upper()
     ship.all_checking(start_coord, end_coord, coord_occupied)
 
 
@@ -120,17 +120,17 @@ def time_ended(start_time):
     print("La partie s'est finie à cause de la limite de temps\n")
     time.sleep(1)
     for i in main.team:
-        print(f"Il reste {len(i.board.ships)} bateaux à l'équipe de {i.name}\n")
+        print(f"Il reste {len(i.board.ships)} bateaux à l'équipe de {i.get_name}\n")
     time.sleep(1)
     if len(main.team[0].board.ships) > len(main.team[1].board.ships):
-        print(f"Bravo, c'est l'équipe de {main.team[0].name} qui à gagné\n")
-        save(start_time, main.team[0].name, "plus de bateaux vivants que l'autre équipe à la fin du timer")
+        print(f"Bravo, c'est l'équipe de {main.team[0].get_name} qui à gagné\n")
+        save(start_time, main.team[0].get_name, "plus de bateaux vivants que l'autre équipe à la fin du timer")
     elif len(main.team[0].board.ships) < len(main.team[1].board.ships):
-        print(f"Bravo, c'est l'équipe de {main.team[1].name} qui à gagné\n")
-        save(start_time, main.team[1].name, "plus de bateaux vivants que l'autre équipe à la fin du timer")
+        print(f"Bravo, c'est l'équipe de {main.team[1].get_name} qui à gagné\n")
+        save(start_time, main.team[1].get_name, "plus de bateaux vivants que l'autre équipe à la fin du timer")
     else:
         print(f"Aucun gagnant, ex-aequo\n")
-        save(start_time, str(main.team[0].name + " et " + main.team[1].name),
+        save(start_time, str(main.team[0].get_name + " et " + main.team[1].get_name),
              "ex-aequo, il reste autant de bateaux vivants aux deux équipes")
 
 
@@ -153,10 +153,10 @@ def start_battle():
                 tempete()
                 time.sleep(2)
                 cls()
-                print(f"\nC'est au tour de {i.name} de tirer \n")
+                print(f"\nC'est au tour de {i.get_name} de tirer \n")
                 print(f"Voici votre historique de tirs: {i.fired_shot}")
                 while True:
-                    case_shot = input(f"C'est au tour de {i.name} de tirer, où voulez-vous tirer ?\n").upper()
+                    case_shot = input(f"C'est au tour de {i.get_name} de tirer, où voulez-vous tirer ?\n").upper()
                     if str(case_shot) in main.all_coord:
                         i.fired_shot.append(case_shot)
                         result = i.shoot(case_shot)
@@ -164,8 +164,8 @@ def start_battle():
                             time.sleep(2)
                             cls()
                             print(
-                                f"Bien joué {i.name} vous avez coulé tout les bateaux adverses, vous avez donc gagné\n")
-                            save(start_time, i.name, "il à coulé tout les bateaux adverses")
+                                f"Bien joué {i.get_name} vous avez coulé tout les bateaux adverses, vous avez donc gagné\n")
+                            save(start_time, i.get_name, "il à coulé tout les bateaux adverses")
                             raise errors.Wiped
                         break
                     else:
