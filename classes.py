@@ -34,7 +34,7 @@ class Team:
 
         for j in main.team:
             if j.__name != self.__name:
-                for a in j.board.get_ships():
+                for a in j.board.__ships:
                     if case_shot in a.coord:
                         print(f"\nLa case {case_shot} du {a.get_ship_name()} à été touchée ! Feu à bord\n")
                         a.coord.remove(case_shot)
@@ -43,7 +43,7 @@ class Team:
                             j.board.__ships.remove(a)
                             functions.cls()
                             print(f"Vous avez coulé le {a.get_ship_name()}\n")
-                            if len(j.board.get_ships()) == 0:
+                            if len(j.board.__ships) == 0:
                                 return "stop"
                         break
                     else:
