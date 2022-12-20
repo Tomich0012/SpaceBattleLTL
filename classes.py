@@ -6,7 +6,6 @@ import sys
 
 
 class Team:
-
     def __init__(self, name):
         self.__name = name
         self.__coord_occupied = []
@@ -53,14 +52,10 @@ class Team:
                         break
 
 
-class Board:
+class Board(Team):
     def __init__(self, team_name, coord_occupied):
-        self.__team = team_name
+        super().__init__(team_name)
         self.ships = self.initialize_ships(coord_occupied)
-
-    @property
-    def get_team(self):
-        return self.__team
 
     def initialize_ships(self, coord_occupied):
         """This method initializes all boats without their positions for each team
@@ -70,7 +65,7 @@ class Board:
 
         ships = []
         for i in main.ships_available:
-            ships.append(Ship(i, main.ships_available[i], self.get_team, coord_occupied))
+            ships.append(Ship(i, main.ships_available[i], self.get_name, coord_occupied))
         return ships
 
 
