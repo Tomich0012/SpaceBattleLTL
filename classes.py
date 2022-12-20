@@ -91,7 +91,6 @@ class Ship:
         POST : Send the coordinates to 'boat_orientation'.
         RAISES : ValueError not a coordinates.
         """
-
         try:
             if start_coord not in main.all_coord or end_coord not in main.all_coord:
                 raise ValueError
