@@ -6,7 +6,6 @@ import sys
 
 
 class Team:
-
     def __init__(self, name):
         self.__name = name
         self.__coord_occupied = []
@@ -21,6 +20,10 @@ class Team:
     def get_coord_occupied(self):
         return self.__coord_occupied
 
+    @property
+    def get_fired_shot(self):
+        return self.__fired_shot
+
     def shoot(self, case_shot):
         """This Method validates the shot on the opponent's board
         PRE : The case_shot need to be a coordinate.
@@ -30,16 +33,16 @@ class Team:
         """
 
         for j in main.team:
-            if j.name != self.get_name:
+            if j.get_name != self.get_name:
                 for a in j.board.ships:
                     if case_shot in a.coord:
-                        print(f"\nLa case {case_shot} du {a.name} à été touchée ! Feu à bord\n")
+                        print(f"\nLa case {case_shot} du {a.get_ship_name} à été touchée ! Feu à bord\n")
                         a.coord.remove(case_shot)
                         time.sleep(2)
                         if len(a.coord) == 0:
                             j.board.ships.remove(a)
                             functions.cls()
-                            print(f"Vous avez coulé le {a.name}\n")
+                            print(f"Vous avez coulé le {a.get_ship_name}\n")
                             if len(j.board.ships) == 0:
                                 return "stop"
                         break
@@ -49,14 +52,10 @@ class Team:
                         break
 
 
-class Board:
+class Board(Team):
     def __init__(self, team_name, coord_occupied):
-        self.__team = team_name
+        super().__init__(team_name)
         self.ships = self.initialize_ships(coord_occupied)
-
-    @property
-    def get_team(self):
-        return self.__team
 
     def initialize_ships(self, coord_occupied):
         """This method initializes all boats without their positions for each team
@@ -66,7 +65,7 @@ class Board:
 
         ships = []
         for i in main.ships_available:
-            ships.append(Ship(i, main.ships_available[i], self.get_team, coord_occupied))
+            ships.append(Ship(i, main.ships_available[i], self.get_name, coord_occupied))
         return ships
 
 
