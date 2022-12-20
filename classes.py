@@ -57,11 +57,7 @@ class Board:
         self.__name = name
         self.ships = self.initialize_ships(coord_occupied)
         self.__coord_occupied = coord_occupied
-
-    @property
-    def get_ships(self):
-        return self.__ships
-    
+        
     def initialize_ships(self, coord_occupied):
         """This method initializes all boats without their positions for each team
         PRE : /
