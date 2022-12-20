@@ -78,10 +78,6 @@ class Ship:
         functions.ask_boat_position(self, coord_occupied)
 
     @property
-    def get_ship_name(self):
-        return self.__ship_name
-
-    @property
     def coord(self):
         return self.__coord
 
