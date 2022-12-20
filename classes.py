@@ -33,7 +33,7 @@ class Team:
         """
 
         for j in main.team:
-            if j.get_name() != self.get_name():
+            if j.__name != self.__name:
                 for a in j.board.ships:
                     if case_shot in a.coord:
                         print(f"\nLa case {case_shot} du {a.get_ship_name()} à été touchée ! Feu à bord\n")
@@ -107,7 +107,7 @@ class Ship:
         try:
             if start_coord not in main.all_coord or end_coord not in main.all_coord:
                 raise ValueError
-            self.boat_orientation(start_coord, end_coord, self.get_ship_name(), coord_occupied)
+            self.boat_orientation(start_coord, end_coord, self.__ship_name, coord_occupied)
         except ValueError:
             print("Mauvaise coordonnée, recommencez")
             functions.ask_boat_position(self, coord_occupied)
