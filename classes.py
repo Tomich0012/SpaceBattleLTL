@@ -14,14 +14,26 @@ class Team:
 
     @property
     def get_name(self):
+        """This method give the access to the team's name
+        PRE : /
+        POST : return the team's name.
+        """
         return self.__name
 
     @property
     def get_coord_occupied(self):
+        """This method give the access to the list of the team's occupied coordinates
+        PRE : /
+        POST : return the team's occupied coordinates.
+        """
         return self.__coord_occupied
 
     @property
     def get_fired_shot(self):
+        """This method give the access to the team's fired shots
+        PRE : /
+        POST : return the team's fired shots.
+        """
         return self.__fired_shot
 
     def shoot(self, case_shot):
@@ -79,10 +91,18 @@ class Ship:
 
     @property
     def coord(self):
+        """This method give the access to the ship's coordinates
+        PRE : /
+        POST : return the ship's coordinates.
+        """
         return self.__coord
 
     @coord.setter
     def coord(self, coord_list):
+        """This method give the access to modify the ship's coordinates
+        PRE : /
+        POST : return the new modified ship's coordinates.
+        """
         self.__coord = coord_list
 
     def all_checking(self, start_coord, end_coord, coord_occupied):
