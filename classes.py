@@ -78,10 +78,6 @@ class Ship:
         functions.ask_boat_position(self, coord_occupied)
 
     @property
-    def get_ship_name(self):
-        return self.__ship_name
-
-    @property
     def coord(self):
         return self.__coord
 
@@ -95,7 +91,6 @@ class Ship:
         POST : Send the coordinates to 'boat_orientation'.
         RAISES : ValueError not a coordinates.
         """
-
         try:
             if start_coord not in main.all_coord or end_coord not in main.all_coord:
                 raise ValueError
