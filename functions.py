@@ -63,7 +63,6 @@ def ask_boat_position(ship, coord_occupied):
     PRE : /
     POST : The coordinates of each boat is sent to the method 'all.checking' from the Ship class.
     """
-
     start_coord = input(f"Entrez maintenant la PREMIERE coordonnée de votre {ship.get_ship_name} qui nécessite "
                         f"{main.ships_available[ship.get_ship_name]} cases : \n").upper()
     end_coord = input(f"Entrez maintenant la DERNIERE coordonnée de votre {ship.get_ship_name} "
@@ -95,7 +94,6 @@ def initialize_teams():
     PRE : /
     POST : Two teams are add to 'team' with the chosen name in the class 'main'.
     """
-
     main.team.clear()
     equipe1 = input("Entrez le nom de l'équipe 1 ")
     equipe2 = input("Entrez le nom de l'équipe 2 ")
@@ -115,7 +113,6 @@ def time_ended(start_time):
     POST :  If a team win the winner is announced
             If both team have the same boats alive at the end of the timer, it is ex-aequo.
     """
-
     print("La partie s'est finie à cause de la limite de temps\n")
     time.sleep(1)
     for i in main.team:
@@ -138,7 +135,6 @@ def start_battle():
     PRE : /
     POST : Starts the game and runs the game.
     """
-
     start_time = main.datetime.now().strftime("%d:%m:%Y :%H:%M")
     time_limit = (main.datetime.now() + main.timedelta(minutes=15)).strftime("%H:%M")
     cls()
