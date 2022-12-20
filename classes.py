@@ -52,20 +52,24 @@ class Team:
                         break
 
 
-class Board(Team):
+class Board:
     def __init__(self, name, coord_occupied):
-        super().__init__(name)
-        self.ships = self.initialize_ships(coord_occupied)
+        self.__name = name
+        self.__ships = self.initialize_ships(coord_occupied)
+        self.__coord_occupied = coord_occupied
+
+    @property
+    def ships(self):
+        return self.__ships
 
     def initialize_ships(self, coord_occupied):
         """This method initializes all boats without their positions for each team
         PRE : /
         POST : All boats are in 'self.ships'
         """
-
         ships = []
         for i in main.ships_available:
-            ships.append(Ship(i, main.ships_available[i], self.get_name(), coord_occupied))
+            ships.append(Ship(i, main.ships_available[i], self.__name, coord_occupied))
         return ships
 
 
