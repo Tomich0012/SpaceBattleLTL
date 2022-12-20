@@ -148,11 +148,11 @@ def start_battle():
             time.sleep(2)
             cls()
             print(f"\nC'est au tour de {i.get_name} de tirer \n")
-            print(f"Voici votre historique de tirs: {i.fired_shot}")
+            print(f"Voici votre historique de tirs: {i.get_fired_shot}")
             while True:
                 case_shot = input(f"C'est au tour de {i.get_name} de tirer, où voulez-vous tirer ?\n").upper()
                 if str(case_shot) in main.all_coord:
-                    i.fired_shot.append(case_shot)
+                    i.get_fired_shot.append(case_shot)
                     result = i.shoot(case_shot)
                     if result == "stop":
                         time.sleep(2)
