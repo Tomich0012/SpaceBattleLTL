@@ -1,8 +1,6 @@
-import cmd
+import classes
 from datetime import datetime, timedelta
 import random
-import functions
-import sys
 
 ships_available = {"SpaceCruiser": 2}
 alpha_columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
@@ -13,35 +11,5 @@ all_coord = []
 time_event = (datetime.now() + timedelta(minutes=random.randint(1, 15))).strftime("%H:%M")
 storm_activate = []
 
-
-class Start(cmd.Cmd):
-    """
-    PRE : The command must be known to be executed.
-    POST : Start the requested method.
-    """
-    intro = "\nBienvenue dans le jeu Space Battle.\n[help] or [?] : pour la liste des commandes possibles." \
-            "\n[start] pour lancer une nouvelle partie.\n[quit] pour quitter le programme."
-    prompt = 'Space Battle : '
-    file = None
-
-    def do_start(self, arg=0):
-        """Start the game.
-        PRE : /
-        POST : The game is started.
-        """
-        
-        functions.cls()
-        functions.board()
-        functions.initialize_teams()
-        functions.start_battle()
-
-    def do_quit(self, arg=0):
-        """Quit the game.
-        PRE : / 
-        POST : The game is closed.
-        """
-        sys.exit()
-
-
 if __name__ == '__main__':
-    Start().cmdloop()
+    classes.Start().cmdloop()
