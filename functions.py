@@ -73,7 +73,7 @@ def ask_boat_position(ship, coord_occupied):
 def board():
     """This function initializes a complete board of 100 cells.
     PRE : /
-    POST : A board of 10×10 cells is created.
+    POST : A board of 10x10 cells is created.
     """
 
     for letter in main.alpha_columns:
@@ -141,31 +141,29 @@ def start_battle():
     input(f"Il est {main.datetime.now().strftime('%H:%M')} Une tempête arrivera sur le plateau à : {main.time_event}\n"
           f"La partie se finira automatiquement à {time_limit}\n"
           f"Appuyez sur [ENTER] pour continuer...")
-    cls()
-    try:
-        while main.datetime.now().strftime("%H:%M") < time_limit:
-            for i in main.team:
-                tempete()
-                time.sleep(2)
-                cls()
-                print(f"\nC'est au tour de {i.get_name} de tirer \n")
-                print(f"Voici votre historique de tirs: {i.fired_shot}")
-                while True:
-                    case_shot = input(f"C'est au tour de {i.get_name} de tirer, où voulez-vous tirer ?\n").upper()
-                    if str(case_shot) in main.all_coord:
-                        i.fired_shot.append(case_shot)
-                        result = i.shoot(case_shot)
-                        if result == "stop":
-                            time.sleep(2)
-                            cls()
-                            print(
-                                f"Bien joué {i.get_name} vous avez coulé tout les bateaux adverses, vous avez donc gagné\n")
-                            save(start_time, i.get_name, "il à coulé tout les bateaux adverses")
-                            raise errors.Wiped
-                        break
-                    else:
-                        print("Votre tir n'est pas correct, recommencez")
-    except errors.Wiped:
-        pass
+
+    while main.datetime.now().strftime("%H:%M") < time_limit:
+        for i in main.team:
+            tempete()
+            time.sleep(2)
+            cls()
+            print(f"\nC'est au tour de {i.name} de tirer \n")
+            print(f"Voici votre historique de tirs: {i.fired_shot}")
+            while True:
+                case_shot = input(f"C'est au tour de {i.name} de tirer, où voulez-vous tirer ?\n").upper()
+                if str(case_shot) in main.all_coord:
+                    i.fired_shot.append(case_shot)
+                    result = i.shoot(case_shot)
+                    if result == "stop":
+                        time.sleep(2)
+                        cls()
+                        print(
+                            f"Bien joué {i.name} vous avez coulé tout les bateaux adverses, vous avez donc gagné\n")
+                        save(start_time, i.name, "il à coulé tout les bateaux adverses")
+                        raise errors.Wiped
+                    break
+                else:
+                    print("Votre tir n'est pas correct, recommencez")
+                    raise errors.IncorectShot
     if main.datetime.now().strftime("%H:%M") >= time_limit:
         time_ended(start_time)
