@@ -21,6 +21,10 @@ class Team:
     def get_coord_occupied(self):
         return self.__coord_occupied
 
+    @property
+    def get_fired_shot(self):
+        return self.__fired_shot
+
     def shoot(self, case_shot):
         """This Method validates the shot on the opponent's board
         PRE : The case_shot need to be a coordinate.
