@@ -31,7 +31,6 @@ def save(start_time, winner, win_condition):
             If the answer is “NO”, the game isn't saved, and the program shuts.
     RAISES : ValueError if the answer is not “YES” or “NOT”.
     """
-
     try:
         response = input("Voulez vous sauvegarder les données de cette partie ? [YES/NO]\n : ").upper()
         if str(response) == "YES":
