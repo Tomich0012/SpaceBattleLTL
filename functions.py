@@ -75,7 +75,7 @@ def ask_boat_position(ship, coord_occupied):
 def board():
     """This function initializes a complete board of 100 cells.
     PRE : /
-    POST : A board of 10×10 cells is created.
+    POST : A board of 10x10 cells is created.
     """
 
     for letter in main.alpha_columns:
