@@ -1,10 +1,13 @@
 import unittest
-import classes, main, functions
+import classes
+import main
+import functions
+
 
 class TestImportClasses(unittest.TestCase):
     def test_Team_init(self):
         # Vérifie que l'initialisation de la classe Team crée une instance de Board
-        team = classes.Team("player1")
+        team = classes.Team("Tom")
         self.assertIsInstance(team.board, classes.Board)
 
     def test_Board_init(self):
@@ -25,3 +28,23 @@ class TestImportClasses(unittest.TestCase):
         main.all_coord = []
         functions.board()
         self.assertEqual(len(main.all_coord), 100)
+
+    # --------------------------------------------
+    # classe Board
+
+    def test_initialize_ships(self):
+        # Test que la méthode initialise bien tous les bateaux sans position
+        board = classes.Board('team1', [])
+        self.assertEqual(len(board.ships), len(main.ships_available))
+        for ship in board.ships:
+            self.assertEqual(ship.team, 'team1')
+            self.assertEqual(ship.coordinates, [])
+
+    def test_init(self):
+        # Test que la méthode __init__ initialise correctement tous les attributs de l'objet
+        board = classes.Board('team1', [[1, 2], [3, 4]])
+        self.assertEqual(board.team, 'team1')
+        self.assertEqual(len(board.ships), len(main.ships_available))
+        for ship in board.ships:
+            self.assertEqual(ship.team, 'team1')
+            self.assertEqual(ship.coordinates, [[1, 2], [3, 4]])
