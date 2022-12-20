@@ -1,6 +1,8 @@
 import functions
 import time
 import main
+import cmd
+import sys
 
 
 class Team:
@@ -157,7 +159,7 @@ class Ship:
                 functions.ask_boat_position(self, coord_occupied)
 
 
-class Start(main.cmd.Cmd):
+class Start(cmd.Cmd):
     """
     PRE : The command must be known to be executed.
     POST : Start the requested method.
@@ -183,4 +185,5 @@ class Start(main.cmd.Cmd):
         PRE : /
         POST : The game is closed.
         """
-        main.sys.exit()
+        sys.exit()
+        
