@@ -34,16 +34,16 @@ class Team:
 
         for j in main.team:
             if j.__name != self.__name:
-                for a in j.board.__ships:
+                for a in j.board.ships:
                     if case_shot in a.coord:
                         print(f"\nLa case {case_shot} du {a.get_ship_name()} à été touchée ! Feu à bord\n")
                         a.coord.remove(case_shot)
                         time.sleep(2)
                         if len(a.coord) == 0:
-                            j.board.__ships.remove(a)
+                            j.board.ships.remove(a)
                             functions.cls()
                             print(f"Vous avez coulé le {a.get_ship_name()}\n")
-                            if len(j.board.__ships) == 0:
+                            if len(j.board.ships) == 0:
                                 return "stop"
                         break
                     else:
@@ -55,7 +55,7 @@ class Team:
 class Board:
     def __init__(self, name, coord_occupied):
         self.__name = name
-        self.__ships = self.initialize_ships(coord_occupied)
+        self.ships = self.initialize_ships(coord_occupied)
         self.__coord_occupied = coord_occupied
 
     @property
