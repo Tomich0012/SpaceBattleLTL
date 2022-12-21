@@ -71,8 +71,6 @@ class Team:
             time.sleep(2)
 
 
-
-
 class Board:
     def __init__(self, name, coord_occupied, ships=None):
         self.__team_name = name
@@ -83,7 +81,7 @@ class Board:
         else:
             self.ships = self.initialize_ships(coord_occupied)
 
-    def initialize_ships(self, coord_occupied):
+    def initialize_ships(self, coord_occupied, start_coord=None, end_coord=None):
         """Cette methode lance l'initialisation des bateaux.
 
             PRE : coord_occupied est liste de string correspondant des coordonées utilisées par les autres bateaux
@@ -92,10 +90,18 @@ class Board:
                     dans le dictionnaire main.ships_available, le nom de l'équipe (self.__team_name)
                         et la liste de coordonnées occupées (coord_occupied)
             """
-        ships = []
-        for i in main.ships_available:
-            ships.append(Ship(i, main.ships_available[i], self.__team_name, coord_occupied))
-        return ships
+        if start_coord and end_coord:
+            ships = []
+            for i in main.ships_available:
+                ships.append(
+                    Ship(i, main.ships_available[i], self.__team_name, coord_occupied, start_coord, end_coord))
+            return ships
+        else:
+            ships = []
+            for i in main.ships_available:
+                ships.append(
+                    Ship(i, main.ships_available[i], self.__team_name, coord_occupied))
+            return ships
 
 
 class Ship:
