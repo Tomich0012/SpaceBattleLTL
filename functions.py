@@ -27,35 +27,41 @@ def tempete():
 def save(start_time, winner, win_condition):
     """This function save the game if the answer is “YES”
     PRE : /
-    POST :  If the answer is “YES” the game is saved in 'statistics.txt' in the directory 'RECORDS', and a message is print.
+    POST :  If the answer is “YES” the game is saved in 'statistics.txt' in the directory 'RECORDS', and a message is
+    print.
             If the answer is “NO”, the game isn't saved, and the program shuts.
     RAISES : ValueError if the answer is not “YES” or “NOT”.
     """
+    response = input("Voulez vous sauvegarder les données de cette partie ? [YES/NO]\n : ").upper()
+    if str(response) == "YES":
+        ld = os.listdir()
+        if "RECORDS" not in ld:
+            os.mkdir("RECORDS")
+        os.chdir("RECORDS")
+        try:
+            with open('statistics.txt', 'a') as file:
+                file.write(f"Partie commencée le {start_time} -- finie à {main.datetime.now().strftime('%H:%M')} -- le "
+                           f"gagnant est {winner} car {win_condition}\n")
+                file.close()
+        except FileNotFoundError:
+            print('Fichier introuvable.')
+        except IOError:
+            print('Erreur IO.')
+        print("Partie sauvegardée, à bientôt...")
+        time.sleep(2)
+    elif str(response) == "NO":
+        print("Partie non sauvegardée, à bientôt...")
+        time.sleep(2)
+    else:
+        raise ValueError("Mauvaise entrée, réessayez")
+
+
+def test_save(start_time, winner, win_condition):
     try:
-        response = input("Voulez vous sauvegarder les données de cette partie ? [YES/NO]\n : ").upper()
-        if str(response) == "YES":
-            ld = os.listdir()
-            if "RECORDS" not in ld:
-                os.mkdir("RECORDS")
-            os.chdir("RECORDS")
-            try:
-                with open('statistics.txt', 'a') as file:
-                    file.write(f"Partie commencée le {start_time} -- finie à {main.datetime.now().strftime('%H:%M')} -- le "
-                               f"gagnant est {winner} car {win_condition}\n")
-                    file.close()
-            except FileNotFoundError:
-                print('Fichier introuvable.')
-            except IOError:
-                print('Erreur IO.')
-            print("Partie sauvegardée, à bientôt...")
-            time.sleep(2)
-        elif str(response) == "NO":
-            print("Partie non sauvegardée, à bientôt...")
-            time.sleep(2)
-        else:
-            raise ValueError
-    except ValueError:
         save(start_time, winner, win_condition)
+    except ValueError as v:
+        print(v)
+        test_save(start_time, winner, win_condition)
 
 
 def ask_boat_position(ship, coord_occupied):
@@ -120,14 +126,14 @@ def time_ended(start_time):
     time.sleep(1)
     if len(main.team[0].board.ships) > len(main.team[1].board.ships):
         print(f"Bravo, c'est l'équipe de {main.team[0].get_name} qui à gagné\n")
-        save(start_time, main.team[0].get_name, "plus de bateaux vivants que l'autre équipe à la fin du timer")
+        test_save(start_time, main.team[0].get_name, "plus de bateaux vivants que l'autre équipe à la fin du timer")
     elif len(main.team[0].board.ships) < len(main.team[1].board.ships):
         print(f"Bravo, c'est l'équipe de {main.team[1].get_name} qui à gagné\n")
-        save(start_time, main.team[1].get_name, "plus de bateaux vivants que l'autre équipe à la fin du timer")
+        test_save(start_time, main.team[1].get_name, "plus de bateaux vivants que l'autre équipe à la fin du timer")
     else:
         print(f"Aucun gagnant, ex-aequo\n")
-        save(start_time, str(main.team[0].get_name + " et " + main.team[1].get_name),
-             "ex-aequo, il reste autant de bateaux vivants aux deux équipes")
+        test_save(start_time, str(main.team[0].get_name + " et " + main.team[1].get_name),
+                  "ex-aequo, il reste autant de bateaux vivants aux deux équipes")
 
 
 def shot_loop(i):
@@ -139,21 +145,22 @@ def shot_loop(i):
             if result == "stop":
                 time.sleep(2)
                 cls()
-                raise errors.Wiped
+                raise errors.Wiped(
+                    f"Bien joué {i.get_name} vous avez coulé tout les bateaux adverses, vous avez donc gagné\n")
             break
         else:
-            raise errors.IncorectShot
+            raise errors.IncorrectShot("Votre tir n'est pas correct, recommencez")
 
 
 def test_shot_loop(i, start_time):
     try:
         shot_loop(i)
-    except errors.Wiped:
-        print(f"Bien joué {i.get_name} vous avez coulé tout les bateaux adverses, vous avez donc gagné\n")
-        save(start_time, i.get_name, "il à coulé tout les bateaux adverses")
-        return 'END'
-    except errors.IncorectShot:
-        print("Votre tir n'est pas correct, recommencez")
+    except errors.Wiped as w:
+        print(w)
+        test_save(start_time, i.get_name, "il à coulé tout les bateaux adverses")
+        return False
+    except errors.IncorrectShot as e:
+        print(e)
         test_shot_loop(i, start_time)
 
 
@@ -162,7 +169,7 @@ def start_battle():
     PRE : /
     POST : Starts the game and runs the game.
     """
-    start_time = main.datetime.now().strftime("%d:%m:%Y :%H:%M")
+    start_time = main.datetime.now().strftime("%d/%m/%Y %H:%M")
     now = main.datetime.now().strftime("%H:%M")
     time_limit = (main.datetime.now() + main.timedelta(minutes=15)).strftime("%H:%M")
     cls()
@@ -178,7 +185,7 @@ def start_battle():
             cls()
             print(f"\nC'est au tour de {i.get_name} de tirer \n")
             print(f"Voici votre historique de tirs: {i.get_fired_shot}")
-            if test_shot_loop(i, start_time) == 'END':
+            if test_shot_loop(i, start_time) is False:
                 now = time_limit
                 break
     if main.datetime.now().strftime("%H:%M") >= time_limit:
