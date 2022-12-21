@@ -8,23 +8,22 @@ import sys
 
 class Team:
     def __init__(self, name, board=None):
-        self.__name = name
+        self.__team_name = name
         self.__coord_occupied = []
         self.__fired_shot = []
 
         if board:
             self.board = board
         else:
-            self.board = Board(self.__name, self.__coord_occupied)
-
+            self.board = Board(self.__team_name, self.__coord_occupied)
 
     @property
-    def get_name(self):
+    def get_team_name(self):
         """Ce getter donne accès à l'attribut privé name
         PRE : /
         POST : retourne le nom de l'équipe
         """
-        return self.__name
+        return self.__team_name
 
     @property
     def get_coord_occupied(self):
@@ -50,12 +49,13 @@ class Team:
                Si la case est touchée et que c'est la dernière caisse de bateau, le bateau est coulé.
                Si la case était vide, le tir est raté.
         """
-
+        is_touched = False
         for j in main.team:
-            if j.__name != self.__name:
+            if j.__team_name != self.__team_name:
                 for a in j.board.ships:
                     if case_shot in a.coord:
                         print(f"\nLa case {case_shot} du {a.get_ship_name} à été touchée ! Feu à bord\n")
+                        is_touched = True
                         a.coord.remove(case_shot)
                         time.sleep(2)
                         if len(a.coord) == 0:
@@ -64,16 +64,18 @@ class Team:
                             print(f"Vous avez coulé le {a.get_ship_name}\n")
                             if len(j.board.ships) == 0:
                                 return "stop"
-                        break
                     else:
-                        print("Dommage, vous avez raté")
-                        time.sleep(2)
-                        break
+                        continue
+        if not is_touched:
+            print("Dommage, vous avez raté")
+            time.sleep(2)
+
+
 
 
 class Board:
     def __init__(self, name, coord_occupied, ships=None):
-        self.__name = name
+        self.__team_name = name
         self.__coord_occupied = coord_occupied
 
         if ships:
@@ -81,18 +83,18 @@ class Board:
         else:
             self.ships = self.initialize_ships(coord_occupied)
 
-       
     def initialize_ships(self, coord_occupied):
         """Cette methode lance l'initialisation des bateaux.
 
             PRE : coord_occupied est liste de string correspondant des coordonées utilisées par les autres bateaux
-            POST : La fonction retourne une liste d'objets de la classe Ship, initialisés avec les informations contenues
-                    dans le dictionnaire main.ships_available, le nom de l'équipe (self.__name)
+            POST : La fonction retourne une liste d'objets de la classe Ship, initialisés avec les informations
+            contenues
+                    dans le dictionnaire main.ships_available, le nom de l'équipe (self.__team_name)
                         et la liste de coordonnées occupées (coord_occupied)
             """
         ships = []
         for i in main.ships_available:
-            ships.append(Ship(i, main.ships_available[i], self.__name, coord_occupied))
+            ships.append(Ship(i, main.ships_available[i], self.__team_name, coord_occupied))
         return ships
 
 
@@ -135,23 +137,28 @@ class Ship:
 
     def all_checking(self, start_coord, end_coord, coord_occupied):
         """Cette methode vérifie que les coordonnées données par l'utilisateur soient sur le plateau.
-        PRE : start_coord et end_coord sont des coordonnées (string) et coord_occupied est une liste de coordonnées (string).
+        PRE : start_coord et end_coord sont des coordonnées (string) et coord_occupied est une liste de coordonnées (
+        string).
 
-        POST : la fonction boat_orientation est appelée avec les arguments start_coord, end_coord, self.__ship_name et coord_occupied.
+        POST : la fonction boat_orientation est appelée avec les arguments start_coord, end_coord, self.__ship_name
+        et coord_occupied.
 
         RAISES : Si start_coord ou end_coord ne se trouvent pas dans main.all_coord, l'exception IncorrectCoordinates
                  est levée avec le message "Au minimum une des coordonnées ne se trouve pas sur le plateau, recommencez"
         """
         if start_coord not in main.all_coord or end_coord not in main.all_coord:
-            raise errors.IncorrectCoordinates("Au minimum une des coordonnées ne se trouve pas sur le plateau, recommencez")
+            raise errors.IncorrectCoordinates(
+                "Au minimum une des coordonnées ne se trouve pas sur le plateau, recommencez")
         else:
             self.boat_orientation(start_coord, end_coord, self.__ship_name, coord_occupied)
 
     def boat_orientation(self, start_coord, end_coord, ship_name, coord_occupied):
         """Cette méthode vérifie si le bateau a été placé horizontalement ou verticalement.
-        PRE : start_coord et end_coord sont des coordonnées (string), coord_occupied est une liste de coordonnées (string)
+        PRE : start_coord et end_coord sont des coordonnées (string), coord_occupied est une liste de coordonnées (
+        string)
                 ship_name est le nom du bateau (string)
-        POST : En fonction de la fonction du bateau, create_boat est appelée avec les arguments start_coord, end_coord, coord_occupied et "x" ou "y"
+        POST : En fonction de la fonction du bateau, create_boat est appelée avec les arguments start_coord,
+        end_coord, coord_occupied et "x" ou "y"
 
         RAISES : Si le bateau n'a pas la taille demandée l'erreur IncorrectSize est levée
         """
@@ -162,14 +169,17 @@ class Ship:
             else:
                 raise errors.IncorrectSize("Erreur, le bateau n'a pas la taille demandée, Recommencez")
         else:
-            if (main.alpha_columns.index(end_coord[0]) - main.alpha_columns.index(start_coord[0])) + 1 == main.ships_available[ship_name]:
+            if (main.alpha_columns.index(end_coord[0]) - main.alpha_columns.index(start_coord[0])) + 1 == \
+                    main.ships_available[ship_name]:
                 self.create_boat(start_coord, end_coord, coord_occupied, "y")
             else:
                 raise errors.IncorrectSize("Erreur, le bateau n'a pas la taille demandée, Recommencez")
 
     def create_boat(self, start_coord, end_coord, coord_occupied, x_or_y):
-        """Cette méthode crée le bateau horizontalement ou verticalement en fonction des coordonnées entrées par l'utilisateur
-        PRE : start_coord et end_coord sont des coordonnées (string), coord_occupied est une liste de coordonnées (string)
+        """Cette méthode crée le bateau horizontalement ou verticalement en fonction des coordonnées entrées par
+        l'utilisateur
+        PRE : start_coord et end_coord sont des coordonnées (string), coord_occupied est une liste de coordonnées (
+        string)
               et x_or_y est une string
         POST :  Crée le bateau et actualise la liste des positions occupées par l'équipe
         """
@@ -225,4 +235,3 @@ class Start(cmd.Cmd):
         POST : Le programme est fermé.
         """
         sys.exit()
-        

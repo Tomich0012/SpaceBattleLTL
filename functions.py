@@ -25,7 +25,7 @@ def tempete():
             for j in i.board.ships:
                 for pos in j.coord:
                     if main.mixed_coord[random_num] in pos:
-                        print(f"Le bateau {j.get_ship_name} de {i.get_name} à été frappé par la tempête")
+                        print(f"Le bateau {j.get_ship_name} de {i.get_team_name} à été frappé par la tempête")
                         j.coord.remove(pos)
 
 
@@ -194,17 +194,17 @@ def time_ended(start_time):
     print("La partie s'est finie à cause de la limite de temps\n")
     time.sleep(1)
     for i in main.team:
-        print(f"Il reste {len(i.board.ships)} bateaux à l'équipe de {i.get_name}\n")
+        print(f"Il reste {len(i.board.ships)} bateaux à l'équipe de {i.get_team_name}\n")
     time.sleep(1)
     if len(main.team[0].board.ships) > len(main.team[1].board.ships):
-        print(f"Bravo, c'est l'équipe de {main.team[0].get_name} qui à gagné\n")
-        test_save(start_time, main.team[0].get_name, "plus de bateaux vivants que l'autre équipe à la fin du timer")
+        print(f"Bravo, c'est l'équipe de {main.team[0].get_team_name} qui à gagné\n")
+        test_save(start_time, main.team[0].get_team_name, "plus de bateaux vivants que l'autre équipe à la fin du timer")
     elif len(main.team[0].board.ships) < len(main.team[1].board.ships):
-        print(f"Bravo, c'est l'équipe de {main.team[1].get_name} qui à gagné\n")
-        test_save(start_time, main.team[1].get_name, "plus de bateaux vivants que l'autre équipe à la fin du timer")
+        print(f"Bravo, c'est l'équipe de {main.team[1].get_team_name} qui à gagné\n")
+        test_save(start_time, main.team[1].get_team_name, "plus de bateaux vivants que l'autre équipe à la fin du timer")
     else:
         print(f"Aucun gagnant, ex-aequo\n")
-        test_save(start_time, str(main.team[0].get_name + " et " + main.team[1].get_name),
+        test_save(start_time, str(main.team[0].get_team_name + " et " + main.team[1].get_team_name),
                   "ex-aequo, il reste autant de bateaux vivants aux deux équipes")
 
 
@@ -217,7 +217,7 @@ def shot_loop(i):
           sinon retourne une erreur de type Wiped si l'objet i a coulé tous les bateaux adverses.
     """
     while True:
-        case_shot = input(f"C'est au tour de {i.get_name} de tirer, où voulez-vous tirer ?\n").upper()
+        case_shot = input(f"C'est au tour de {i.get_team_name} de tirer, où voulez-vous tirer ?\n").upper()
         if str(case_shot) in main.all_coord:
             i.get_fired_shot.append(case_shot)
             result = i.shoot(case_shot)
@@ -225,7 +225,7 @@ def shot_loop(i):
                 time.sleep(2)
                 cls()
                 raise errors.Wiped(
-                    f"Bien joué {i.get_name} vous avez coulé tout les bateaux adverses, vous avez donc gagné\n")
+                    f"Bien joué {i.get_team_name} vous avez coulé tout les bateaux adverses, vous avez donc gagné\n")
             break
         else:
             raise errors.IncorrectShot("Votre tir n'est pas correct, recommencez")
@@ -246,7 +246,7 @@ def test_shot_loop(i, start_time):
         shot_loop(i)
     except errors.Wiped as w:
         print(w)
-        test_save(start_time, i.get_name, "il à coulé tout les bateaux adverses")
+        test_save(start_time, i.get_team_name, "il à coulé tout les bateaux adverses")
         return False
     except errors.IncorrectShot as e:
         print(e)
@@ -276,7 +276,7 @@ def start_battle():
             tempete()
             time.sleep(2)
             cls()
-            print(f"\nC'est au tour de {i.get_name} de tirer \n")
+            print(f"\nC'est au tour de {i.get_team_name} de tirer \n")
             print(f"Voici votre historique de tirs: {i.get_fired_shot}")
             if test_shot_loop(i, start_time) is False:
                 now = time_limit
