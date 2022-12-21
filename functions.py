@@ -64,12 +64,15 @@ def test_save(start_time, winner, win_condition):
         test_save(start_time, winner, win_condition)
 
 
-def test_all_checking(ship, start_coord, end_coord, coord_occupied):
+def test_all_checking(ship, start_coord, end_coord, coord_occupied, test=None):
     try:
         ship.all_checking(start_coord, end_coord, coord_occupied)
     except errors.IncorrectCoordinates as v:
-        print(v)
-        ask_boat_position(ship, coord_occupied)
+        if test:
+            pass
+        else:
+            print(v)
+            ask_boat_position(ship, coord_occupied)
     except errors.IncorrectSize as s:
         print(s)
         ask_boat_position(ship, coord_occupied)
@@ -106,14 +109,19 @@ def cls():
     os.system('cls')
 
 
-def initialize_teams():
+def initialize_teams(first=None, second=None):
     """This function initializes the teams, and their respective boats
     PRE : /
     POST : Two teams are add to 'team' with the chosen name in the class 'main'.
     """
     main.team.clear()
-    equipe1 = input("Entrez le nom de l'équipe 1 ")
-    equipe2 = input("Entrez le nom de l'équipe 2 ")
+    if first and second:
+        equipe1 = first
+        equipe2 = second
+
+    else:
+        equipe1 = input("Entrez le nom de l'équipe 1 ")
+        equipe2 = input("Entrez le nom de l'équipe 2 ")
     cls()
     print(f"\n \nC'est au tour de {equipe1} d'initialiser ses bateaux\n")
     time.sleep(1)
