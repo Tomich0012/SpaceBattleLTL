@@ -105,12 +105,13 @@ def initialize_teams(first=None, second=None):
     POST : Two teams are add to 'team' with the chosen name in the class 'main'.
     """
     team.clear()
-    if (first and second) is None:
-        equipe1 = input("Entrez le nom de l'équipe 1 ")
-        equipe2 = input("Entrez le nom de l'équipe 2 ")
-    else:
+    if first and second:
         equipe1 = first
         equipe2 = second
+
+    else:
+        equipe1 = input("Entrez le nom de l'équipe 1 ")
+        equipe2 = input("Entrez le nom de l'équipe 2 ")
     cls()
     print(f"\n \nC'est au tour de {equipe1} d'initialiser ses bateaux\n")
     team.append(classes.Team(equipe1))
@@ -180,6 +181,7 @@ def start_battle():
                     break
                 else:
                     print("Votre tir n'est pas correct, recommencez")
-                    raise errors.IncorectShot
+                    # ici le raise créé une erreur donc pas utile, on va devoir mettre un Try except, mais je sais pas comment
+                    # raise errors.IncorectShot
     if datetime.now().strftime("%H:%M") >= time_limit:
         time_ended(start_time)

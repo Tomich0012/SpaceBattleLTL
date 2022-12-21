@@ -76,16 +76,23 @@ class Board:
         else:
             self.ships = self.initialize_ships(coord_occupied)
 
-    def initialize_ships(self, coord_occupied):
+    def initialize_ships(self, coord_occupied, start=None, end=None):
         """This method initializes all boats without their positions for each team
         PRE : /
         POST : All boats are in 'self.ships'
         """
-        ships = []
-        for i in main.ships_available:
-            ships.append(
-                Ship(i, main.ships_available[i], self.__name, coord_occupied))
-        return ships
+        if start and end:
+            ships = []
+            for i in main.ships_available:
+                ships.append(
+                    Ship(i, main.ships_available[i], self.__name, coord_occupied, start, end))
+            return ships
+        else:
+            ships = []
+            for i in main.ships_available:
+                ships.append(
+                    Ship(i, main.ships_available[i], self.__name, coord_occupied))
+            return ships
 
 
 class Ship:
