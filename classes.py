@@ -7,11 +7,16 @@ import sys
 
 
 class Team:
-    def __init__(self, name):
+    def __init__(self, name, board=None):
         self.__name = name
         self.__coord_occupied = []
-        self.board = Board(self.__name, self.__coord_occupied)
         self.__fired_shot = []
+
+        if board:
+            self.board = board
+        else:
+            self.board = Board(self.__name, self.__coord_occupied)
+
 
     @property
     def get_name(self):
@@ -67,11 +72,16 @@ class Team:
 
 
 class Board:
-    def __init__(self, name, coord_occupied):
+    def __init__(self, name, coord_occupied, ships=None):
         self.__name = name
-        self.ships = self.initialize_ships(coord_occupied)
         self.__coord_occupied = coord_occupied
-        
+
+        if ships:
+            self.ships = ships
+        else:
+            self.ships = self.initialize_ships(coord_occupied)
+
+       
     def initialize_ships(self, coord_occupied):
         """Cette methode lance l'initialisation des bateaux.
 
@@ -87,12 +97,17 @@ class Board:
 
 
 class Ship:
-    def __init__(self, name, size, team_name, coord_occupied):
+    def __init__(self, name, size, team_name, coord_occupied, start_coord=None, end_coord=None):
         self.__team = team_name
         self.__ship_name = name
         self.__size = size
         self.__coord = []
-        functions.ask_boat_position(self, coord_occupied)
+
+        if start_coord and end_coord:
+            functions.board()
+            functions.test_all_checking(self, start_coord, end_coord, coord_occupied)
+        else:
+            functions.ask_boat_position(self, coord_occupied)
 
     @property
     def get_ship_name(self):
@@ -129,7 +144,8 @@ class Ship:
         """
         if start_coord not in main.all_coord or end_coord not in main.all_coord:
             raise errors.IncorrectCoordinates("Au minimum une des coordonnées ne se trouve pas sur le plateau, recommencez")
-        self.boat_orientation(start_coord, end_coord, self.__ship_name, coord_occupied)
+        else:
+            self.boat_orientation(start_coord, end_coord, self.__ship_name, coord_occupied)
 
     def boat_orientation(self, start_coord, end_coord, ship_name, coord_occupied):
         """Cette méthode vérifie si le bateau a été placé horizontalement ou verticalement.
@@ -146,8 +162,7 @@ class Ship:
             else:
                 raise errors.IncorrectSize("Erreur, le bateau n'a pas la taille demandée, Recommencez")
         else:
-            if (main.alpha_columns.index(end_coord[0]) - main.alpha_columns.index(start_coord[0])) + 1 == main.ships_available[
-                ship_name]:
+            if (main.alpha_columns.index(end_coord[0]) - main.alpha_columns.index(start_coord[0])) + 1 == main.ships_available[ship_name]:
                 self.create_boat(start_coord, end_coord, coord_occupied, "y")
             else:
                 raise errors.IncorrectSize("Erreur, le bateau n'a pas la taille demandée, Recommencez")
@@ -161,8 +176,8 @@ class Ship:
 
         if x_or_y == "x":
             coord_boat_x = []
-            for i in range(int(start_coord[1:]), int(end_coord[1:]) + 1):
-                coord_boat_x.append(start_coord[0] + str(i))
+            for j in range(int(start_coord[1:]), int(end_coord[1:]) + 1):
+                coord_boat_x.append(start_coord[0] + str(j))
             if len(set(coord_boat_x) & set(coord_occupied)) == 0:
                 self.coord = coord_boat_x
                 for i in coord_boat_x:
@@ -172,8 +187,8 @@ class Ship:
                 functions.ask_boat_position(self, coord_occupied)
         else:
             coord_boat_y = []
-            for i in range(main.alpha_columns.index(start_coord[0]), main.alpha_columns.index(end_coord[0]) + 1):
-                coord_boat_y.append(main.alpha_columns[i] + start_coord[1])
+            for j in range(main.alpha_columns.index(start_coord[0]), main.alpha_columns.index(end_coord[0]) + 1):
+                coord_boat_y.append(main.alpha_columns[j] + start_coord[1])
             if len(set(coord_boat_y) & set(coord_occupied)) == 0:
                 self.coord = coord_boat_y
                 for i in coord_boat_y:
