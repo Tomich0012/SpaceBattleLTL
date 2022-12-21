@@ -15,34 +15,35 @@ class Team:
 
     @property
     def get_name(self):
-        """This method give the access to the team's name
+        """Ce getter donne accès à l'attribut privé name
         PRE : /
-        POST : return the team's name.
+        POST : retourne le nom de l'équipe
         """
         return self.__name
 
     @property
     def get_coord_occupied(self):
-        """This method give the access to the list of the team's occupied coordinates
+        """Ce getter donne accès à l'attribut privé coord_occupied
         PRE : /
-        POST : return the team's occupied coordinates.
+        POST : retourne la liste des coordonnées occupées par l'équipe
         """
         return self.__coord_occupied
 
     @property
     def get_fired_shot(self):
-        """This method give the access to the team's fired shots
+        """Ce getter donne accès à l'attribut privé fired_shot
         PRE : /
-        POST : return the team's fired shots.
+        POST : retourne la liste des positions sur lesquelles l'équipe a déjà tiré
         """
         return self.__fired_shot
 
     def shoot(self, case_shot):
-        """This Method validates the shot on the opponent's board
-        PRE : The case_shot need to be a coordinate.
-        POST :  If the case was occupied by a boat, is touched, and the case is remove from 'coord'
-                If the case is touched and this is the last case of boat, the boat is sunk.
-                If the case was empty, then the shoot is failed.
+        """Cette methode vérifie si le tir touche un bateau ou est raté.
+
+        PRE : case_shoot est une string correspondant à une coordonnée de tir
+        POST : Si la case était occupée par un bateau, c'est touché et la case est retirée de la liste 'coord'
+               Si la case est touchée et que c'est la dernière caisse de bateau, le bateau est coulé.
+               Si la case était vide, le tir est raté.
         """
 
         for j in main.team:
@@ -72,10 +73,13 @@ class Board:
         self.__coord_occupied = coord_occupied
         
     def initialize_ships(self, coord_occupied):
-        """This method initializes all boats without their positions for each team
-        PRE : /
-        POST : All boats are in 'self.ships'
-        """
+        """Cette methode lance l'initialisation des bateaux.
+
+            PRE : coord_occupied est liste de string correspondant des coordonées utilisées par les autres bateaux
+            POST : La fonction retourne une liste d'objets de la classe Ship, initialisés avec les informations contenues
+                    dans le dictionnaire main.ships_available, le nom de l'équipe (self.__name)
+                        et la liste de coordonnées occupées (coord_occupied)
+            """
         ships = []
         for i in main.ships_available:
             ships.append(Ship(i, main.ships_available[i], self.__name, coord_occupied))
@@ -92,38 +96,48 @@ class Ship:
 
     @property
     def get_ship_name(self):
+        """Ce getter donne accès à l'attribut privé ship_name
+        PRE : /
+        POST : retourne le nom du bateau
+        """
         return self.__ship_name
 
     @property
     def coord(self):
-        """This method give the access to the ship's coordinates
+        """Ce getter donne accès à l'attribut privé coord
         PRE : /
-        POST : return the ship's coordinates.
+        POST : retourne la liste des coordonnées occupées par le bateau
         """
         return self.__coord
 
     @coord.setter
     def coord(self, coord_list):
-        """This method give the access to modify the ship's coordinates
+        """Ce setter permet de modifier l'attribut privé coord
         PRE : /
-        POST : return the new modified ship's coordinates.
+        POST : attribue comme valeur coord_list à l'attribut coord
         """
         self.__coord = coord_list
 
     def all_checking(self, start_coord, end_coord, coord_occupied):
-        """This method verifies the placement coordinates of the boat.
-        PRE : /
-        POST : Send the coordinates to 'boat_orientation'.
-        RAISES : ValueError not a coordinates.
+        """Cette methode vérifie que les coordonnées données par l'utilisateur soient sur le plateau.
+        PRE : start_coord et end_coord sont des coordonnées (string) et coord_occupied est une liste de coordonnées (string).
+
+        POST : la fonction boat_orientation est appelée avec les arguments start_coord, end_coord, self.__ship_name et coord_occupied.
+
+        RAISES : Si start_coord ou end_coord ne se trouvent pas dans main.all_coord, l'exception IncorrectCoordinates
+                 est levée avec le message "Au minimum une des coordonnées ne se trouve pas sur le plateau, recommencez"
         """
         if start_coord not in main.all_coord or end_coord not in main.all_coord:
             raise errors.IncorrectCoordinates("Au minimum une des coordonnées ne se trouve pas sur le plateau, recommencez")
         self.boat_orientation(start_coord, end_coord, self.__ship_name, coord_occupied)
 
     def boat_orientation(self, start_coord, end_coord, ship_name, coord_occupied):
-        """This method checks if the boat has been placed horizontally or vertically, and calls create_boat().
-        PRE : /
-        POST :  Create all the position to a list if the boat is in the great position.
+        """Cette méthode vérifie si le bateau a été placé horizontalement ou verticalement.
+        PRE : start_coord et end_coord sont des coordonnées (string), coord_occupied est une liste de coordonnées (string)
+                ship_name est le nom du bateau (string)
+        POST : En fonction de la fonction du bateau, create_boat est appelée avec les arguments start_coord, end_coord, coord_occupied et "x" ou "y"
+
+        RAISES : Si le bateau n'a pas la taille demandée l'erreur IncorrectSize est levée
         """
 
         if start_coord[0] == end_coord[0]:
@@ -139,9 +153,10 @@ class Ship:
                 raise errors.IncorrectSize("Erreur, le bateau n'a pas la taille demandée, Recommencez")
 
     def create_boat(self, start_coord, end_coord, coord_occupied, x_or_y):
-        """This method creates the boat horizontally or vertically.
-        PRE : /
-        POST :  Create the boat and change the availability of the boxes it occupies.
+        """Cette méthode crée le bateau horizontalement ou verticalement en fonction des coordonnées entrées par l'utilisateur
+        PRE : start_coord et end_coord sont des coordonnées (string), coord_occupied est une liste de coordonnées (string)
+              et x_or_y est une string
+        POST :  Crée le bateau et actualise la liste des positions occupées par l'équipe
         """
 
         if x_or_y == "x":
@@ -169,9 +184,9 @@ class Ship:
 
 
 class Start(cmd.Cmd):
-    """
-    PRE : The command must be known to be executed.
-    POST : Start the requested method.
+    """Cette méthode permet le lancement du programme grâce à l'import Cmd
+    PRE : La commande doit être connue pour être exécutée
+    POST : Lance la méthode choisie par l'utilisateur
     """
     intro = "\nBienvenue dans le jeu Space Battle.\n[help] or [?] : pour la liste des commandes possibles." \
             "\n[start] pour lancer une nouvelle partie.\n[quit] pour quitter le programme."
@@ -179,9 +194,9 @@ class Start(cmd.Cmd):
     file = None
 
     def do_start(self, arg=0):
-        """Start the game.
+        """Lance la partie
         PRE : /
-        POST : The game is started.
+        POST : La partie est lancée
         """
 
         functions.cls()
@@ -190,9 +205,9 @@ class Start(cmd.Cmd):
         functions.start_battle()
 
     def do_quit(self, arg=0):
-        """Quit the game.
+        """Quitte le programme
         PRE : /
-        POST : The game is closed.
+        POST : Le programme est fermé.
         """
         sys.exit()
         
