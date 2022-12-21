@@ -130,6 +130,33 @@ def time_ended(start_time):
              "ex-aequo, il reste autant de bateaux vivants aux deux équipes")
 
 
+def shot_loop(i):
+    while True:
+        case_shot = input(f"C'est au tour de {i.get_name} de tirer, où voulez-vous tirer ?\n").upper()
+        if str(case_shot) in main.all_coord:
+            i.get_fired_shot.append(case_shot)
+            result = i.shoot(case_shot)
+            if result == "stop":
+                time.sleep(2)
+                cls()
+                raise errors.Wiped
+            break
+        else:
+            raise errors.IncorectShot
+
+
+def test_shot_loop(i, start_time):
+    try:
+        shot_loop(i)
+    except errors.Wiped:
+        print(f"Bien joué {i.get_name} vous avez coulé tout les bateaux adverses, vous avez donc gagné\n")
+        save(start_time, i.get_name, "il à coulé tout les bateaux adverses")
+        pass
+    except errors.IncorectShot:
+        print("Votre tir n'est pas correct, recommencez")
+        test_shot_loop(i, start_time)
+
+
 def start_battle():
     """This function start the game and allows you to shoot at the opposing team's board in turn
     PRE : /
@@ -149,21 +176,6 @@ def start_battle():
             cls()
             print(f"\nC'est au tour de {i.get_name} de tirer \n")
             print(f"Voici votre historique de tirs: {i.get_fired_shot}")
-            while True:
-                case_shot = input(f"C'est au tour de {i.get_name} de tirer, où voulez-vous tirer ?\n").upper()
-                if str(case_shot) in main.all_coord:
-                    i.get_fired_shot.append(case_shot)
-                    result = i.shoot(case_shot)
-                    if result == "stop":
-                        time.sleep(2)
-                        cls()
-                        print(
-                            f"Bien joué {i.get_name} vous avez coulé tout les bateaux adverses, vous avez donc gagné\n")
-                        save(start_time, i.get_name, "il à coulé tout les bateaux adverses")
-                        raise errors.Wiped
-                    break
-                else:
-                    print("Votre tir n'est pas correct, recommencez")
-                    raise errors.IncorectShot
+            test_shot_loop(i, start_time)
     if main.datetime.now().strftime("%H:%M") >= time_limit:
         time_ended(start_time)
