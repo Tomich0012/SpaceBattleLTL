@@ -53,15 +53,26 @@ def save(start_time, winner, win_condition):
         print("Partie non sauvegardée, à bientôt...")
         time.sleep(2)
     else:
-        raise ValueError("Mauvaise entrée, réessayez")
+        raise errors.SaveError("Mauvaise entrée, réessayez")
 
 
 def test_save(start_time, winner, win_condition):
     try:
         save(start_time, winner, win_condition)
-    except ValueError as v:
-        print(v)
+    except errors.SaveError as e:
+        print(e)
         test_save(start_time, winner, win_condition)
+
+
+def test_all_checking(ship, start_coord, end_coord, coord_occupied):
+    try:
+        ship.all_checking(start_coord, end_coord, coord_occupied)
+    except errors.IncorrectCoordinates as v:
+        print(v)
+        ask_boat_position(ship, coord_occupied)
+    except errors.IncorrectSize as s:
+        print(s)
+        ask_boat_position(ship, coord_occupied)
 
 
 def ask_boat_position(ship, coord_occupied):
@@ -73,7 +84,7 @@ def ask_boat_position(ship, coord_occupied):
                         f"{main.ships_available[ship.get_ship_name]} cases : \n").upper()
     end_coord = input(f"Entrez maintenant la DERNIERE coordonnée de votre {ship.get_ship_name} "
                       f"qui nécessite {main.ships_available[ship.get_ship_name]} cases : \n").upper()
-    ship.all_checking(start_coord, end_coord, coord_occupied)
+    test_all_checking(ship, start_coord, end_coord, coord_occupied)
 
 
 def board():

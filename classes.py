@@ -1,3 +1,4 @@
+import errors
 import functions
 import time
 import main
@@ -115,13 +116,9 @@ class Ship:
         POST : Send the coordinates to 'boat_orientation'.
         RAISES : ValueError not a coordinates.
         """
-        try:
-            if start_coord not in main.all_coord or end_coord not in main.all_coord:
-                raise ValueError
-            self.boat_orientation(start_coord, end_coord, self.__ship_name, coord_occupied)
-        except ValueError:
-            print("Mauvaise coordonnée, recommencez")
-            functions.ask_boat_position(self, coord_occupied)
+        if start_coord not in main.all_coord or end_coord not in main.all_coord:
+            raise errors.IncorrectCoordinates("Au minimum une des coordonnées ne se trouve pas sur le plateau, recommencez")
+        self.boat_orientation(start_coord, end_coord, self.__ship_name, coord_occupied)
 
     def boat_orientation(self, start_coord, end_coord, ship_name, coord_occupied):
         """This method checks if the boat has been placed horizontally or vertically, and calls create_boat().
@@ -133,15 +130,13 @@ class Ship:
             if (int(end_coord[1:]) - int(start_coord[1:])) + 1 == main.ships_available[ship_name]:
                 self.create_boat(start_coord, end_coord, coord_occupied, "x")
             else:
-                print("Erreur, le bateau n'a pas la taille demandée, Recommencez")
-                functions.ask_boat_position(self, coord_occupied)
+                raise errors.IncorrectSize("Erreur, le bateau n'a pas la taille demandée, Recommencez")
         else:
             if (main.alpha_columns.index(end_coord[0]) - main.alpha_columns.index(start_coord[0])) + 1 == main.ships_available[
                 ship_name]:
                 self.create_boat(start_coord, end_coord, coord_occupied, "y")
             else:
-                print("Erreur, le bateau n'a pas la taille demandée, Recommencez")
-                functions.ask_boat_position(self, coord_occupied)
+                raise errors.IncorrectSize("Erreur, le bateau n'a pas la taille demandée, Recommencez")
 
     def create_boat(self, start_coord, end_coord, coord_occupied, x_or_y):
         """This method creates the boat horizontally or vertically.

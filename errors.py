@@ -5,3 +5,15 @@ class Wiped(Exception):
 
 class IncorrectShot(Exception):
     pass
+
+
+class IncorrectCoordinates(Exception):
+    pass
+
+
+class IncorrectSize(Exception):
+    pass
+
+
+class SaveError(Exception):
+    pass
