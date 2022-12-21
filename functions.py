@@ -151,7 +151,7 @@ def test_shot_loop(i, start_time):
     except errors.Wiped:
         print(f"Bien joué {i.get_name} vous avez coulé tout les bateaux adverses, vous avez donc gagné\n")
         save(start_time, i.get_name, "il à coulé tout les bateaux adverses")
-        pass
+        return 'END'
     except errors.IncorectShot:
         print("Votre tir n'est pas correct, recommencez")
         test_shot_loop(i, start_time)
@@ -163,19 +163,23 @@ def start_battle():
     POST : Starts the game and runs the game.
     """
     start_time = main.datetime.now().strftime("%d:%m:%Y :%H:%M")
+    now = main.datetime.now().strftime("%H:%M")
     time_limit = (main.datetime.now() + main.timedelta(minutes=15)).strftime("%H:%M")
     cls()
     input(f"Il est {main.datetime.now().strftime('%H:%M')} Une tempête arrivera sur le plateau à : {main.time_event}\n"
           f"La partie se finira automatiquement à {time_limit}\n"
           f"Appuyez sur [ENTER] pour continuer...")
 
-    while main.datetime.now().strftime("%H:%M") < time_limit:
+    while now < time_limit:
+        now = main.datetime.now().strftime("%H:%M")
         for i in main.team:
             tempete()
             time.sleep(2)
             cls()
             print(f"\nC'est au tour de {i.get_name} de tirer \n")
             print(f"Voici votre historique de tirs: {i.get_fired_shot}")
-            test_shot_loop(i, start_time)
+            if test_shot_loop(i, start_time) == 'END':
+                now = time_limit
+                break
     if main.datetime.now().strftime("%H:%M") >= time_limit:
         time_ended(start_time)
