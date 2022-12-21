@@ -6,9 +6,14 @@ import os
 
 
 def tempete():
-    """This function start a random storm on the board in the game. 
-    PRE : /
-    POST : A random row automatically switches to “touch”.
+    """
+    Cette fonction gère l'événement tempête dans le jeu.
+
+    PRE : main.datetime.now().strftime("%H:%M") doit être égal à main.time_event et main.storm_activate doit être
+    une liste vide.
+
+    POST : la tempête est déclenchée et une rangée de la grille de jeu est choisie au hasard pour être touchée par
+    la tempête. Les bateaux situés sur cette rangée sont affectés par la tempête.
     """
     if main.datetime.now().strftime("%H:%M") == main.time_event and main.storm_activate == []:
         main.storm_activate.append("storm happened")
@@ -25,13 +30,20 @@ def tempete():
 
 
 def save(start_time, winner, win_condition):
-    """This function save the game if the answer is “YES”
-    PRE : /
-    POST :  If the answer is “YES” the game is saved in 'statistics.txt' in the directory 'RECORDS', and a message is
-    print.
-            If the answer is “NO”, the game isn't saved, and the program shuts.
-    RAISES : ValueError if the answer is not “YES” or “NOT”.
     """
+    Sauvegarde les données de la partie dans un fichier texte.
+
+    PRE :
+        - start_time est une chaîne de caractères représentant l'heure de début de la partie.
+        - winner est une chaîne de caractères représentant le nom du gagnant de la partie.
+        - win_condition est une chaîne de caractères représentant la raison pour laquelle le gagnant a gagné.
+
+    POST :
+        - Si l'utilisateur répond "YES" à la question de sauvegarde, les données de la partie sont ajoutées au
+        fichier texte 'statistics.txt' dans le dossier 'RECORDS'.
+        - Si l'utilisateur répond "NO" à la question de sauvegarde, la partie n'est pas sauvegardée.
+        - Si l'utilisateur répond autre chose qu'un "YES" ou "NO", une exception de type 'SaveError' est levée.
+        """
     response = input("Voulez vous sauvegarder les données de cette partie ? [YES/NO]\n : ").upper()
     if str(response) == "YES":
         ld = os.listdir()
@@ -57,6 +69,17 @@ def save(start_time, winner, win_condition):
 
 
 def test_save(start_time, winner, win_condition):
+    """
+    Teste si la fonction save() renvoie une erreur
+
+    PRE :
+        - start_time est un objet datetime représentant l'heure de début de la partie.
+        - winner est un objet représentant le gagnant de la partie.
+        - win_condition est un objet représentant les conditions de victoire de la partie.
+    POST :
+        Si l'enregistrement de la partie a réussi, la fonction ne renvoie rien.
+        Si l'enregistrement de la partie a échoué, la fonction imprime l'erreur et appelle récursivement la fonction test_save avec les mêmes arguments.
+    """
     try:
         save(start_time, winner, win_condition)
     except errors.SaveError as e:
@@ -65,6 +88,21 @@ def test_save(start_time, winner, win_condition):
 
 
 def test_all_checking(ship, start_coord, end_coord, coord_occupied, test=None):
+
+    """
+    Fonction qui teste si la fonction all_checking() renvoie une erreur
+
+    PRE :
+       - ship est une instance de la classe Ship
+       - start_coord et end_coord sont des strings de coordonnées (colonnes,lignes) représentant les coordonnées de début et de fin du navire
+       - coord_occupied est une liste de coordonnées (string) représentant les coordonnées occupées par des navires
+    POST :
+       - Si l'exception IncorrectCoordinates est levée, le message d'erreur est affiché et la fonction
+       ask_boat_position est appelée avec les arguments ship et coord_occupied
+       - Si l'exception IncorrectSize est levée, le message d'erreur est affiché et la fonction
+       ask_boat_position est appelée avec les arguments ship et coord_occupied
+    """
+
     try:
         ship.all_checking(start_coord, end_coord, coord_occupied)
     except errors.IncorrectCoordinates as v:
@@ -79,9 +117,18 @@ def test_all_checking(ship, start_coord, end_coord, coord_occupied, test=None):
 
 
 def ask_boat_position(ship, coord_occupied):
-    """This function asks each team the boxes to position each boat.
-    PRE : /
-    POST : The coordinates of each boat is sent to the method 'all.checking' from the Ship class.
+    """
+    Demande et vérifie la position du navire sur la grille.
+
+    PRE :
+        - ship est un objet de type Ship.
+        - coord_occupied est une liste de coordonnées (chaine de caractères) occupées sur la grille.
+
+    POST :
+        - Si la position du navire est valide, elle est ajoutée à coord_occupied et les coordonnées de début et
+        de fin du navire sont définies sur les attributs start_coord et end_coord de l'objet ship.
+        - Si la position du navire n'est pas valide, l'utilisateur est invité à entrer de nouvelles coordonnées
+        jusqu'à ce qu'une position valide soit entrée.
     """
     start_coord = input(f"Entrez maintenant la PREMIERE coordonnée de votre {ship.get_ship_name} qui nécessite "
                         f"{main.ships_available[ship.get_ship_name]} cases : \n").upper()
@@ -91,28 +138,32 @@ def ask_boat_position(ship, coord_occupied):
 
 
 def board():
-    """This function initializes a complete board of 100 cells.
-    PRE : /
-    POST : A board of 10×10 cells is created.
     """
+    Initialise le board
 
+    PRE : -
+    POST : Construit une liste de coordonnées de grille (en lettres et chiffres) en utilisant les valeurs de
+    main.alpha_columns et main.num_lines.
+    """
     for letter in main.alpha_columns:
         for digit in main.num_lines:
             main.all_coord.append(letter + str(digit))
 
 
 def cls():
-    """This function clean the console.
-    PRE : / 
-    POST : The console is clean.
+    """
+    Nettoie la console
+
+    PRE : -
+    POST : Efface le contenu de la console.
     """
     os.system('cls')
 
 
 def initialize_teams(first=None, second=None):
-    """This function initializes the teams, and their respective boats
+    """La fonction initialize_teams initialise les 2 équipes demandant à l'utilisateur de saisir le nom de chaque équipe
     PRE : /
-    POST : Two teams are add to 'team' with the chosen name in the class 'main'.
+    POST : ajoute ces objets de classe team à la liste main.team.
     """
     main.team.clear()
     if first and second:
@@ -133,10 +184,12 @@ def initialize_teams(first=None, second=None):
 
 
 def time_ended(start_time):
-    """This function runs if the timer is over and announces the winner according to the remaining boats
-    PRE : /
-    POST :  If a team win the winner is announced
-            If both team have the same boats alive at the end of the timer, it is ex-aequo.
+    """
+    Fonction qui détermine le/les vainqueurs en cas de temps écoulé
+
+    PRE : start_time est un objet datetime valide représentant le moment où la partie a débuté.
+    POST : Affiche le résultat de la partie en fonction du nombre de bateaux restants de chaque équipe. Enregistre
+    également les détails de la partie dans un fichier de test.
     """
     print("La partie s'est finie à cause de la limite de temps\n")
     time.sleep(1)
@@ -156,6 +209,13 @@ def time_ended(start_time):
 
 
 def shot_loop(i):
+    """
+    Fonction qui initialise la boucle de tir
+
+    PRE : i est un objet de type Team
+    POST : Retourne une erreur de type IncorrectShot si le tir de l'objet i n'est pas correct,
+          sinon retourne une erreur de type Wiped si l'objet i a coulé tous les bateaux adverses.
+    """
     while True:
         case_shot = input(f"C'est au tour de {i.get_name} de tirer, où voulez-vous tirer ?\n").upper()
         if str(case_shot) in main.all_coord:
@@ -172,6 +232,16 @@ def shot_loop(i):
 
 
 def test_shot_loop(i, start_time):
+    """
+    Fonction qui teste si la fonction shot_loop() renvoie une erreur
+
+    PRE : i est un objet de type Team et start_time est un objet de type float
+    POST : Si tous les bateaux du joueur i ont été coulés, la fonction renvoie False et affiche un message d'erreur.
+          Ensuite, il sera demandé à l'utilisateur s'il veut sauvegarder la partie.
+         Si le coup joué est incorrect, la fonction appelle à nouveau la fonction test_shot_loop avec les mêmes
+         arguments.
+         Sinon, la fonction ne renvoie rien.
+    """
     try:
         shot_loop(i)
     except errors.Wiped as w:
@@ -184,9 +254,13 @@ def test_shot_loop(i, start_time):
 
 
 def start_battle():
-    """This function start the game and allows you to shoot at the opposing team's board in turn
+    """ Cette fonction lance le début des tirs entre chaque équipe
     PRE : /
-    POST : Starts the game and runs the game.
+    POST : - L'utilisateur appuie sur la touche "Entrée" pour démarrer la guerre
+           - Pour chaque objet Team de la liste main.team, la fonction tempete est appelée,
+            puis la fonction test_shot_loop est appelée avec les arguments i (objet Team) et start_time
+           - Si la fonction test_shot_loop retourne False, la boucle while est terminée
+           - Si l'heure actuelle est supérieure ou égale à time_limit, la fonction time_ended est appelée avec l'argument start_time
     """
     start_time = main.datetime.now().strftime("%d/%m/%Y %H:%M")
     now = main.datetime.now().strftime("%H:%M")
