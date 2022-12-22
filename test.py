@@ -21,9 +21,9 @@ class TestImportClasses(unittest.TestCase):
 
     def test_Board_init(self):
         ship1 = Ship("SpaceCruiser", 2, "La team", [], "A1", "A2")
-        ship2 = Ship("SpaceCruiser", 2, "La team", [], "B4", "B5")
+        ship2 = Ship("USS Enterprise", 3, "La team", [], "B4", "B6")
 
-        b = Board("Board", [], [ship1, ship2])
+        b = Board("La team", [], [ship1, ship2])
         self.assertIsNotNone(b)
         # Ici mettre les assert pour board
 
@@ -31,16 +31,16 @@ class TestImportClasses(unittest.TestCase):
 
     def test_initialize_ships(self):
         ship1 = Ship("SpaceCruiser", 2, "La team", [], "A1", "A2")
-        ship2 = Ship("SpaceCruiser", 2, "La team", [], "B4", "B5")
+        ship2 = Ship("USS Enterprise", 3, "La team", [], "B4", "B6")
 
-        b = Board("Board", [], [ship1, ship2])
-        self.assertIsInstance(b.initialize_ships([], "A3", "A4")[0], Ship)
+        b = Board("La team", [], [ship1, ship2])
+        self.assertIsInstance(b.initialize_ships([], "A3", "A4", "SpaceCruiser", 2)[0], Ship)
 
     # test error
 
     def test_Team_init(self):
         ship1 = Ship("SpaceCruiser", 2, "La team", [], "A1", "A2")
-        ship2 = Ship("SpaceCruiser", 2, "La team", [], "B4", "B5")
+        ship2 = Ship("USS Enterprise", 3, "La team", [], "B4", "B6")
         b = Board("Board", [], [ship1, ship2])
 
         t = Team("Loic", b)
