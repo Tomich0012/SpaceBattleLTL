@@ -87,7 +87,7 @@ def test_save(start_time, winner, win_condition):
         test_save(start_time, winner, win_condition)
 
 
-def test_all_checking(ship, start_coord, end_coord, coord_occupied, test=None):
+def test_all_checking(ship, start_coord, end_coord, coord_occupied):
 
     """
     Fonction qui teste si la fonction all_checking() renvoie une erreur
@@ -106,11 +106,8 @@ def test_all_checking(ship, start_coord, end_coord, coord_occupied, test=None):
     try:
         ship.all_checking(start_coord, end_coord, coord_occupied)
     except errors.IncorrectCoordinates as v:
-        if test:
-            pass
-        else:
-            print(v)
-            ask_boat_position(ship, coord_occupied)
+        print(v)
+        ask_boat_position(ship, coord_occupied)
     except errors.IncorrectSize as s:
         print(s)
         ask_boat_position(ship, coord_occupied)
@@ -231,7 +228,7 @@ def shot_loop(i):
             raise errors.IncorrectShot("Votre tir n'est pas correct, recommencez")
 
 
-def test_shot_loop(i, start_time):
+def test_shot_loop(i, start_time) :
     """
     Fonction qui teste si la fonction shot_loop() renvoie une erreur
 

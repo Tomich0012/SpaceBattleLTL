@@ -48,6 +48,8 @@ class Team:
         POST : Si la case était occupée par un bateau, c'est touché et la case est retirée de la liste 'coord'
                Si la case est touchée et que c'est la dernière caisse de bateau, le bateau est coulé.
                Si la case était vide, le tir est raté.
+
+        Loïc
         """
         is_touched = False
         for j in main.team:
@@ -97,8 +99,7 @@ class Board:
         else:
             ships = []
             for i in main.ships_available:
-                ships.append(
-                    Ship(i, main.ships_available[i], self.__team_name, coord_occupied))
+                ships.append(Ship(i, main.ships_available[i], self.__team_name, coord_occupied))
             return ships
 
 
@@ -151,8 +152,7 @@ class Ship:
                  est levée avec le message "Au minimum une des coordonnées ne se trouve pas sur le plateau, recommencez"
         """
         if start_coord not in main.all_coord or end_coord not in main.all_coord:
-            raise errors.IncorrectCoordinates(
-                "Au minimum une des coordonnées ne se trouve pas sur le plateau, recommencez")
+            raise errors.IncorrectCoordinates("Au minimum une des coordonnées ne se trouve pas sur le plateau, recommencez")
         else:
             self.boat_orientation(start_coord, end_coord, self.__ship_name, coord_occupied)
 

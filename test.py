@@ -1,7 +1,7 @@
 import unittest
-from classes import *
 
-main.testunit = True
+import errors
+from classes import *
 
 
 class TestImportClasses(unittest.TestCase):
@@ -14,10 +14,9 @@ class TestImportClasses(unittest.TestCase):
         self.assertIsInstance(ship, Ship)
         self.assertIsNotNone(ship)
 
-        #with self.assertRaises(errors.IncorrectCoordinates):
-        #    Ship("SpaceCruiser", 2, "La team", [], "A1", "A12")
-
-    # test error
+    '''def test_Wrong_coord(self):
+        self.assertRaises(errors.IncorrectCoordinates, Ship, "SpaceCruiser", 2, "La team", [], "AA", "BB")
+    # test error'''
 
     def test_Board_init(self):
         ship1 = Ship("SpaceCruiser", 2, "La team", [], "A1", "A2")
